@@ -1,0 +1,71 @@
+buildscript {
+	repositories {
+		mavenCentral()
+	}
+	dependencies {
+		classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.18'
+	}
+}
+
+plugins {
+	id 'org.springframework.boot' version '2.1.5.RELEASE'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+	id 'com.google.protobuf' version "0.8.18"
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'com.google.protobuf'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.demo.grpc'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	runtimeOnly 'io.grpc:grpc-netty-shaded:1.45.1'
+
+	annotationProcessor 'org.projectlombok:lombok:1.18.20'
+
+	compileOnly 'org.apache.tomcat:annotations-api:6.0.53' // necessary for Java 9+
+	compileOnly 'org.projectlombok:lombok:1.18.20'
+
+	implementation 'io.grpc:grpc-protobuf:1.45.1'
+	implementation 'io.grpc:grpc-stub:1.45.1'
+	implementation('org.springframework.boot:spring-boot-starter-webflux')
+	implementation('de.flapdoodle.embed:de.flapdoodle.embed.mongo')
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'net.devh:grpc-spring-boot-starter:2.13.1.RELEASE'
+	implementation "com.salesforce.servicelibs:reactor-grpc-stub:1.2.3"
+
+
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation('io.projectreactor:reactor-test')
+}
+
+protobuf {
+	protoc {
+		artifact = "com.google.protobuf:protoc:3.19.2"
+	}
+	plugins {
+		grpc {
+			artifact = 'io.grpc:protoc-gen-grpc-java:1.45.1'
+		}
+		reactor {
+			artifact = "com.salesforce.servicelibs:reactor-grpc:1.2.3"
+		}
+	}
+	generateProtoTasks {
+		all()*.plugins {
+			grpc {}
+			reactor {}
+		}
+	}
+	generatedFilesBaseDir = "$projectDir/generated"
+}
+

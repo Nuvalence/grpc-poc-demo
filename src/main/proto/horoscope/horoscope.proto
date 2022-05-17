@@ -1,0 +1,38 @@
+syntax = 'proto3';
+option java_package = "com.proto";
+option java_multiple_files = true;
+
+message FindZodiacSignRequest {
+  int32 birthMonth = 1;
+  int32 birthDay = 2;
+}
+enum ZodiacSign {
+  ARIES=0;
+  TAURUS=1;
+  GEMINI=2;
+  CANCER=3;
+  LEO=4;
+  VIRGO=5;
+  LIBRA=6;
+  SCORPIO=7;
+  SAGITTARIUS=8;
+  CAPRICORN=9;
+  AQUARIUS=10;
+  PISCES=11;
+}
+message FindZodiacSignResponse {
+  ZodiacSign zodiacSign = 1;
+}
+
+message HoroscopeReadingRequest {
+  ZodiacSign horoscopeType = 1;
+}
+message HoroscopeReadingResponse {
+  string reading = 1;
+}
+
+service HoroscopeService {
+  rpc FindZodiacSign(stream FindZodiacSignRequest) returns (FindZodiacSignResponse) {}
+
+  rpc GetHoroscopeReading(HoroscopeReadingRequest) returns (stream HoroscopeReadingResponse) {}
+}

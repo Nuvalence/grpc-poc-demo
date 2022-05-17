@@ -23,7 +23,6 @@ public class ReadingsClient {
         return webClient
                 .get()
                 .uri(sign.toString().toLowerCase()+'/')
-//                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
                 .retrieve()
                 .bodyToFlux(Readings.class);
     }
@@ -31,17 +30,17 @@ public class ReadingsClient {
     public static void main(String[] args) {
         ReadingsClient api = new ReadingsClient();
 
-        var reading = api.getReading(ZodiacSign.CANCER)
+        var test = api.getReading(ZodiacSign.CANCER)
                 .doOnComplete(() -> {
                     System.out.println("============= howdy ");
                 })
                 .map(read -> {
-                    System.out.println("==READDD==");
+                    System.out.println("==reading==");
                     System.out.println(read);
                     System.out.println(read.getHoroscope());
                     System.out.println(read.getSign());
                     System.out.println(read.getDate());
-                    System.out.println("==READDD==");
+                    System.out.println("==reading==");
                     return read;
                 })
 //                .blockLast();
